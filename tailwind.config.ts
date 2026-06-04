@@ -1,12 +1,27 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Meridian design tokens wired into Tailwind.
- * The full token source of truth remains app/styles/colors_and_type.css
- * (CSS custom properties). These mappings let you write `bg-navy`,
- * `text-brass-deep`, `font-display`, etc. for app shell + new components,
- * while the ported deck slides reuse the original .page component classes.
+ * Meridian design tokens wired into Tailwind — built FROM design/tokens.ts
+ * (via the generated CSS custom properties), not a hand-typed copy. Two rules
+ * keep this non-breaking:
+ *
+ *   1. ADDITIVE — every legacy utility the repo already uses (bg-navy,
+ *      text-paper, ring-brass, border-line-strong, text-brass-deep, …) is
+ *      regenerated here. Semantic names (bg-canvas, text-ink, …) are ADDED
+ *      alongside. No legacy name is removed, or the admin UI + shadcn break.
+ *
+ *   2. CSS-VAR REFS with rgb CHANNELS — colors resolve to
+ *      `rgb(var(--x-rgb) / <alpha-value>)`, where `--x-rgb` holds the
+ *      space-separated channels emitted by scripts/build-tokens.ts. This kills
+ *      drift (one source), lets `data-theme="inverse"` re-skin utilities at
+ *      runtime, AND keeps opacity modifiers working (bg-brass/15, text-paper/60,
+ *      ring-brass/40, bg-navy-deep/50). A plain `var(--navy)` would silently
+ *      drop the alpha and change the render.
  */
+
+/** color utility backed by rgb channels, opacity-modifier safe. */
+const c = (channelVar: string) => `rgb(var(${channelVar}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -17,32 +32,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: { DEFAULT: "#0B2545", deep: "#07182E" },
-        blue: { DEFAULT: "#1B3A6B", mid: "#2C6299" },
-        azure: "#4A89C4",
-        sky: "#8FBCE0",
-        mist: "#CFE0EF",
-        brass: { DEFAULT: "#B4893C", deep: "#8C6722", soft: "#E7D6AE" },
-        char: "#14202E",
-        slate: { DEFAULT: "#33455A", mid: "#5A6B7E", soft: "#8A98A6" },
-        line: { DEFAULT: "#D7DCE2", strong: "#B7C0CA" },
-        paper: { DEFAULT: "#F8F7F3", alt: "#F1EFEA" },
-        cloud: "#EDF1F5",
-        positive: "#2E6B4F",
-        negative: "#9B2C2C",
+        // ── LEGACY primitive utilities (unchanged names; now var-backed) ──
+        navy:  { DEFAULT: c("--navy-rgb"), deep: c("--navy-deep-rgb") },
+        blue:  { DEFAULT: c("--blue-rgb"), mid: c("--blue-mid-rgb") },
+        azure: c("--azure-rgb"),
+        sky:   c("--sky-rgb"),
+        mist:  c("--mist-rgb"),
+        brass: { DEFAULT: c("--brass-rgb"), deep: c("--brass-deep-rgb"), soft: c("--brass-soft-rgb") },
+        char:  c("--char-rgb"),
+        slate: { DEFAULT: c("--slate-rgb"), mid: c("--slate-mid-rgb"), soft: c("--slate-soft-rgb") },
+        line:  { DEFAULT: c("--line-rgb"), strong: c("--line-strong-rgb") },
+        paper: { DEFAULT: c("--paper-rgb"), alt: c("--paper-alt-rgb") },
+        cloud: c("--cloud-rgb"),
+        positive: { DEFAULT: c("--positive-rgb"), soft: c("--positive-soft-rgb") },
+        negative: { DEFAULT: c("--negative-rgb"), soft: c("--negative-soft-rgb") },
+
+        // ── SEMANTIC utilities (preferred for NEW work; themeable) ──
+        canvas: c("--surface-canvas-rgb"),
+        raised: c("--surface-raised-rgb"),
+        sunken: c("--surface-sunken-rgb"),
+        ink: {
+          DEFAULT: c("--ink-default-rgb"), strong: c("--ink-strong-rgb"),
+          muted: c("--ink-muted-rgb"), subtle: c("--ink-subtle-rgb"), inverse: c("--ink-inverse-rgb"),
+        },
+        accent: {
+          DEFAULT: c("--accent-rgb"), strong: c("--accent-strong-rgb"),
+          soft: c("--accent-soft-rgb"), on: c("--on-accent-rgb"),
+        },
+        edge: { // "border-*" names collide with Tailwind borderColor; expose under `edge`
+          subtle: c("--border-subtle-rgb"), strong: c("--border-strong-rgb"), accent: c("--border-accent-rgb"),
+        },
+        data: {
+          primary: c("--data-primary-rgb"), support: c("--data-support-rgb"),
+          tint: c("--data-tint-rgb"), emphasis: c("--data-emphasis-rgb"),
+        },
+        pos: { DEFAULT: c("--pos-rgb"), soft: c("--pos-soft-rgb") },
+        neg: { DEFAULT: c("--neg-rgb"), soft: c("--neg-soft-rgb") },
       },
       fontFamily: {
-        display: ['"Source Serif 4"', "Iowan Old Style", "Georgia", "serif"],
-        sans: ['"IBM Plex Sans"', '"Helvetica Neue"', "Arial", "sans-serif"],
-        mono: ['"IBM Plex Mono"', '"SFMono-Regular"', "Menlo", "monospace"],
+        display: ["var(--font-display)"],
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
       },
-      borderRadius: { DEFAULT: "2px", lg: "4px" },
+      borderRadius: { DEFAULT: "var(--radius)", lg: "var(--radius-lg)" },
       boxShadow: {
-        sm: "0 1px 2px rgba(11,37,69,0.08)",
-        md: "0 4px 16px rgba(11,37,69,0.10)",
-        lg: "0 12px 40px rgba(11,37,69,0.14)",
-        page: "0 18px 60px rgba(7,24,46,0.22)",
+        sm: "var(--shadow-sm)", md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)", page: "var(--shadow-page)",
       },
+      ringColor: { DEFAULT: "var(--focus-ring)" },
     },
   },
   plugins: [require("tailwindcss-animate")],

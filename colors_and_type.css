@@ -1,0 +1,334 @@
+/* ============================================================
+   MERIDIAN — Institutional Finance Design System
+   Colors & Type — "Quiet Authority"
+   ------------------------------------------------------------
+   A blue-forward visual language for investment memoranda,
+   informational overviews, and institutional reference material.
+   Restraint over decoration. Numbers are the hero.
+   ============================================================ */
+
+/* ----------- Fonts (Google) ----------- */
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+:root {
+  /* ===========================================================
+     COLOR — "The Blue Ledger"
+     Deep institutional blues, cool slate neutrals, warm paper,
+     a single restrained brass accent for emphasis & data marks.
+     =========================================================== */
+
+  /* --- Core blues (the spine of the system) --- */
+  --navy:        #0B2545;   /* Primary ink. Headlines, dark fields. */
+  --navy-deep:   #07182E;   /* Near-black blue. Full-bleed cover. */
+  --blue:        #1B3A6B;   /* Secondary structural blue. */
+  --blue-mid:    #2C6299;   /* Workhorse chart blue. */
+  --azure:       #4A89C4;   /* Lighter data blue / links on dark. */
+  --sky:         #8FBCE0;   /* Chart tint, supporting series. */
+  --mist:        #CFE0EF;   /* Lightest blue wash, fills. */
+
+  /* --- Brass accent (used SPARINGLY — emphasis & key figures) --- */
+  --brass:       #B4893C;   /* The single warm accent. */
+  --brass-deep:  #8C6722;   /* WCAG-safe brass text on paper/white. */
+  --brass-soft:  #E7D6AE;   /* Tonal fills, soft underlines. */
+
+  /* --- Slate neutrals (text, rules, structure) --- */
+  --char:        #14202E;   /* Charcoal-blue, near-black body ink. */
+  --slate:       #33455A;   /* Strong secondary text. */
+  --slate-mid:   #5A6B7E;   /* Muted text, captions. */
+  --slate-soft:  #8A98A6;   /* Tertiary / meta. */
+  --line:        #D7DCE2;   /* Hairline borders on light. */
+  --line-strong: #B7C0CA;   /* Heavier light-mode rule. */
+
+  /* --- Surfaces --- */
+  --paper:       #F8F7F3;   /* Warm off-white. Default document field. */
+  --paper-alt:   #F1EFEA;   /* Inset / banded sections. */
+  --cloud:       #EDF1F5;   /* Cool neutral panel (tables, callouts). */
+  --white:       #FFFFFF;
+
+  /* --- Semantic (finance: gains / losses / neutral marks) --- */
+  --positive:    #2E6B4F;   /* Gains, green. */
+  --positive-soft: #DCEAE2;
+  --negative:    #9B2C2C;   /* Losses, deep red. */
+  --negative-soft: #F1DEDE;
+  --neutral-mark: var(--slate-mid);
+
+  /* --- Functional tints (derived) --- */
+  --navy-80: rgba(11, 37, 69, 0.80);
+  --navy-60: rgba(11, 37, 69, 0.60);
+  --navy-40: rgba(11, 37, 69, 0.40);
+  --navy-20: rgba(11, 37, 69, 0.20);
+  --navy-10: rgba(11, 37, 69, 0.10);
+  --navy-05: rgba(11, 37, 69, 0.05);
+
+  --brass-30: rgba(180, 137, 60, 0.30);
+  --brass-15: rgba(180, 137, 60, 0.15);
+
+  --paper-on-navy: rgba(248, 247, 243, 0.72); /* muted text on dark fields */
+
+  /* --- Semantic role tokens --- */
+  --bg:          var(--paper);
+  --bg-alt:      var(--paper-alt);
+  --bg-panel:    var(--cloud);
+  --bg-inverse:  var(--navy);
+
+  --fg:          var(--char);     /* primary body text */
+  --fg-strong:   var(--navy);     /* headlines */
+  --fg-muted:    var(--slate-mid);
+  --fg-subtle:   var(--slate-soft);
+  --fg-inverse:  var(--paper);
+  --fg-accent:   var(--brass-deep);
+
+  --border:        var(--line);
+  --border-strong: var(--line-strong);
+  --border-ink:    var(--navy);
+  --border-accent: var(--brass);
+
+  --focus-ring:  var(--brass);
+  --selection:   var(--brass-soft);
+
+  /* ===========================================================
+     TYPE — Two-and-a-half voices:
+       Display  · Source Serif 4   (authority, headlines, hero figures)
+       Text     · IBM Plex Sans    (body, UI, labels)
+       Figure   · IBM Plex Mono    (eyebrows, data labels, tabular meta)
+     =========================================================== */
+  --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-sans:    "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Scale — editorial. Numbers can go very large; body stays calm. */
+  --fs-mono-xs:   0.6875rem;  /* 11px — footers, fine print */
+  --fs-mono-sm:   0.75rem;    /* 12px — eyebrows, labels, axis ticks */
+  --fs-body-sm:   0.875rem;   /* 14px — captions, table cells */
+  --fs-body:      1rem;       /* 16px — base */
+  --fs-body-lg:   1.1875rem;  /* 19px — lead paragraphs */
+  --fs-body-xl:   1.375rem;   /* 22px — pull statements */
+  --fs-h6:        1.25rem;    /* 20px */
+  --fs-h5:        1.5rem;     /* 24px */
+  --fs-h4:        1.9375rem;  /* 31px */
+  --fs-h3:        2.5rem;     /* 40px */
+  --fs-h2:        3.25rem;    /* 52px */
+  --fs-h1:        4.5rem;     /* 72px — page display */
+  --fs-hero:      6.5rem;     /* 104px — cover / hero numbers */
+  --fs-mega:      9rem;       /* 144px — single dominant figure */
+
+  --lh-tight:    0.95;
+  --lh-display:  1.02;
+  --lh-heading:  1.12;
+  --lh-body:     1.62;
+  --lh-loose:    1.75;
+
+  --tracking-tight:  -0.02em;
+  --tracking-snug:   -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-widest:  0.16em;   /* mono eyebrows */
+
+  /* ===========================================================
+     SPACING / STRUCTURE
+     8px base grid. Sober radii. Precise, low-blur shadows.
+     =========================================================== */
+  --radius:    2px;   /* Crisp, near-square. Institutional, not playful. */
+  --radius-lg: 4px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Border weights */
+  --bw-hair: 1px;     /* default hairline rule */
+  --bw-thin: 2px;     /* emphasis underline, active state */
+  --bw-rule: 3px;     /* section rule */
+  --bw-strap: 4px;    /* heavy top-strap / accent bar */
+
+  /* Shadows — soft, low, institutional. No hard offsets. */
+  --shadow-sm:  0 1px 2px rgba(11, 37, 69, 0.08);
+  --shadow-md:  0 4px 16px rgba(11, 37, 69, 0.10);
+  --shadow-lg:  0 12px 40px rgba(11, 37, 69, 0.14);
+  --shadow-page: 0 18px 60px rgba(7, 24, 46, 0.22);
+
+  /* Motion — measured, never bouncy */
+  --dur-quick: 120ms;
+  --dur-base:  240ms;
+  --dur-slow:  480ms;
+  --ease:      cubic-bezier(0.2, 0, 0, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout rhythm */
+  --tempo-section: clamp(64px, 8vw, 120px);
+  --tempo-gutter:  clamp(24px, 4vw, 72px);
+  --measure: 68ch;
+}
+
+/* ===========================================================
+   SEMANTIC ELEMENT DEFAULTS
+   Raw HTML should read correctly with only these applied.
+   =========================================================== */
+
+html { color: var(--fg); background: var(--bg); }
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1;
+}
+
+::selection { background: var(--selection); color: var(--navy); }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--fg-strong);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-tight);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--fs-h1); line-height: var(--lh-display); font-weight: 600; }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); font-weight: 500; }
+h5 { font-size: var(--fs-h5); font-weight: 500; }
+h6 { font-size: var(--fs-h6); font-weight: 500; }
+
+/* Signature emphasis — italic serif, brass. One phrase per view. */
+em, .emph { font-style: italic; color: var(--brass-deep); font-family: var(--font-display); }
+
+p { max-width: var(--measure); text-wrap: pretty; }
+
+a { color: var(--blue-mid); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--brass-deep); }
+
+small, .meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+hr { border: 0; border-top: var(--bw-hair) solid var(--border); margin: var(--space-8) 0; }
+
+code, kbd, samp { font-family: var(--font-mono); font-size: 0.92em; }
+
+/* Tabular figures — ALWAYS on for numbers in tables, stats, charts. */
+.tnum, table, .stat, .figure-num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* ============================================================
+   UTILITY CLASSES — use directly in static HTML
+   ============================================================ */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+.eyebrow--brass { color: var(--brass-deep); }
+.eyebrow--onnavy { color: var(--brass-soft); }
+
+.rule-hair  { height: 1px; background: var(--border); border: 0; }
+.rule-strong{ height: 1px; background: var(--border-strong); border: 0; }
+.rule-ink   { height: 3px; background: var(--navy); border: 0; }
+.rule-brass { height: 3px; background: var(--brass); border: 0; }
+
+/* The hero number — large display figure, optical kerning, tabular. */
+.figure-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+  color: var(--navy);
+  font-variant-numeric: tabular-nums;
+}
+.figure-num--brass { color: var(--brass-deep); }
+.figure-num--paper { color: var(--paper); }
+
+/* Card — institutional: light shadow, hairline, near-square. */
+.card {
+  background: var(--white);
+  border: var(--bw-hair) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.card--accent { border-top: var(--bw-strap) solid var(--brass); }
+.card--ink    { background: var(--navy); color: var(--paper); border-color: var(--navy); }
+
+/* Eyebrow + heading block helper */
+.lede { font-size: var(--fs-body-lg); color: var(--slate); line-height: var(--lh-body); max-width: var(--measure); }
+
+/* Pull statement — serif, large, restrained */
+.pull {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-body-xl);
+  line-height: 1.4;
+  color: var(--navy);
+  max-width: 40ch;
+  text-wrap: balance;
+}
+.pull em { font-style: italic; color: var(--brass-deep); }
+
+/* Data table — institutional ledger styling */
+.ledger { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.ledger th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-muted);
+  font-weight: 500;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--bw-thin) solid var(--navy);
+}
+.ledger td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--bw-hair) solid var(--border);
+  font-size: var(--fs-body-sm);
+  color: var(--slate);
+}
+.ledger td.num, .ledger th.num { text-align: right; }
+
+/* Footer disclaimer — fine print, mono */
+.disclaimer {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-xs);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--fg-subtle);
+  line-height: 1.5;
+}
+
+/* Tag / chip — phase markers, status */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border: var(--bw-hair) solid var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--slate);
+}
+.tag--brass { border-color: var(--brass); color: var(--brass-deep); background: var(--brass-15); }
+.tag--ink   { border-color: var(--navy); color: var(--paper); background: var(--navy); }

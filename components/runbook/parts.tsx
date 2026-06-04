@@ -124,3 +124,83 @@ export function Blank({ hint }: { hint: string }) {
     </span>
   );
 }
+
+/** Institutional ledger table. Headers + rows of cells; numeric columns wrap. */
+export function Table({
+  headers,
+  rows,
+  caption,
+}: {
+  headers: ReactNode[];
+  rows: ReactNode[][];
+  caption?: ReactNode;
+}) {
+  return (
+    <div className="mt-5 overflow-x-auto">
+      <table className="w-full border-collapse text-left tabular-nums">
+        <thead>
+          <tr>
+            {headers.map((h, i) => (
+              <th
+                key={i}
+                className="border-b-2 border-navy px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-slate-mid"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, r) => (
+            <tr key={r}>
+              {row.map((cell, c) => (
+                <td
+                  key={c}
+                  className="border-b border-line px-3 py-2 align-top text-[13.5px] leading-[1.5] text-slate"
+                >
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {caption ? (
+        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.1em] text-slate-soft">
+          {caption}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Tone-aware callout for deal flags. Distinct from <Note> (which is the brass
+ * "to confirm" prompt): use this for reconciliation conflicts, resolved
+ * decisions, and open items so the must-reconcile flags read at a glance.
+ */
+export function Flag({
+  children,
+  label = "Flag",
+  tone = "warn",
+}: {
+  children: ReactNode;
+  label?: string;
+  tone?: "warn" | "conflict" | "resolved" | "open";
+}) {
+  const tones = {
+    warn: { edge: "border-brass", chip: "text-brass-deep", fill: "bg-[var(--brass-15)]" },
+    conflict: { edge: "border-negative", chip: "text-negative", fill: "bg-[var(--negative-soft)]" },
+    resolved: { edge: "border-positive", chip: "text-positive", fill: "bg-[var(--positive-soft)]" },
+    open: { edge: "border-line-strong", chip: "text-slate-mid", fill: "bg-cloud" },
+  } as const;
+  const t = tones[tone];
+  return (
+    <div className={`mt-5 border-l-4 ${t.edge} ${t.fill} px-5 py-3`}>
+      <div className={`font-mono text-[10px] uppercase tracking-[0.12em] ${t.chip}`}>
+        {label}
+      </div>
+      <div className="mt-1 text-[14px] leading-[1.55] text-slate">{children}</div>
+    </div>
+  );
+}

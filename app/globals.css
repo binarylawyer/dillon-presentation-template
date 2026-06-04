@@ -1,0 +1,24 @@
+/* Design system first: defines all --tokens + raw element styling + @font imports.
+   These @import rules must precede the @tailwind directives. */
+@import "./styles/colors_and_type.css";
+@import "./styles/memo.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* App-shell helpers (the platform chrome, not the slides themselves).
+   The deck artboards keep their own .page styling from memo.css. */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* The platform runs full-bleed dark behind the artboards in present mode. */
+.stage {
+  background: #c5cad2;
+}
+.stage--dark {
+  background: var(--navy-deep);
+}

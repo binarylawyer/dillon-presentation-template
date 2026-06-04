@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "tokens": "tsx scripts/build-tokens.ts",
+    "predev": "npm run tokens",
     "dev": "next dev",
+    "prebuild": "npm run tokens",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -32,6 +35,7 @@
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.22.4",
     "typescript": "^5.7.3"
   }
 }

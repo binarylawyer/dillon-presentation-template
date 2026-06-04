@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "email": "moyelaw@gmail.com",
+      "username": "admin",
+      "role": "admin",
+      "passwordHash": "$2a$10$/j4TabXFp.cg/.YoLqyXz.x1OGQPvG6Ngts9782fV2b8Y0YgWt3q2"
+    }
+  ]
+}

@@ -10,8 +10,8 @@ import decksAccess from "@/config/decks-access.json";
 
 const access = decksAccess as Record<string, { protected: boolean }>;
 
-function loginRedirect(req: NextRequest, reason?: string) {
-  const url = new URL("/login", req.url);
+function redirectTo(req: NextRequest, path: string, reason?: string) {
+  const url = new URL(path, req.url);
   url.searchParams.set("next", req.nextUrl.pathname + req.nextUrl.search);
   if (reason) url.searchParams.set("error", reason);
   return NextResponse.redirect(url);
@@ -19,19 +19,24 @@ function loginRedirect(req: NextRequest, reason?: string) {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // The admin sign-in page must stay public to avoid a redirect loop.
+  if (pathname === "/admin/login") return NextResponse.next();
+
   const session = await verifySession(req.cookies.get(SESSION_COOKIE)?.value);
 
-  // Admin portal: require an admin session.
+  // Admin portal: require an admin account session.
   if (pathname.startsWith("/admin")) {
-    if (!session) return loginRedirect(req);
-    if (session.role !== "admin") return loginRedirect(req, "forbidden");
+    if (!session) return redirectTo(req, "/admin/login");
+    if (session.role !== "admin") return redirectTo(req, "/admin/login", "forbidden");
     return NextResponse.next();
   }
 
-  // Deck routes: /<slug> and /<slug>/scroll.
+  // Deck routes (/<slug>, /<slug>/scroll): any valid session — an admin/viewer
+  // account OR the shared presentation password — unlocks protected decks.
   const slug = pathname.split("/").filter(Boolean)[0];
   if (slug && access[slug]?.protected && !session) {
-    return loginRedirect(req);
+    return redirectTo(req, "/login");
   }
 
   return NextResponse.next();

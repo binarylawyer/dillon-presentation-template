@@ -25,6 +25,7 @@ export type DecksAccess = Record<string, DeckAccess>;
 
 const USERS_PATH = path.join(process.cwd(), "config", "users.json");
 const DECKS_PATH = path.join(process.cwd(), "config", "decks-access.json");
+const SITE_PATH = path.join(process.cwd(), "config", "site.json");
 
 export class ReadOnlyError extends Error {
   constructor() {
@@ -134,4 +135,29 @@ export async function setDeckProtected(
   const access = await readDecksAccess();
   access[slug] = { protected: isProtected };
   await writeJson(DECKS_PATH, access);
+}
+
+// ---- Shared presentation password (Vimeo-style single gate) ----
+interface Site {
+  presentationPasswordHash?: string;
+}
+
+export async function hasPresentationPassword(): Promise<boolean> {
+  const site = await readJson<Site>(SITE_PATH, {});
+  return Boolean(site.presentationPasswordHash);
+}
+
+export async function verifyPresentationPassword(
+  password: string,
+): Promise<boolean> {
+  const site = await readJson<Site>(SITE_PATH, {});
+  if (!site.presentationPasswordHash) return false;
+  return bcrypt.compare(password, site.presentationPasswordHash);
+}
+
+export async function setPresentationPassword(password: string): Promise<void> {
+  if (!password) throw new Error("Password cannot be empty.");
+  const site = await readJson<Site>(SITE_PATH, {});
+  site.presentationPasswordHash = await bcrypt.hash(password, 10);
+  await writeJson(SITE_PATH, site);
 }

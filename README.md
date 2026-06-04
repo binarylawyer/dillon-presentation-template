@@ -87,14 +87,21 @@ the above on-brand.
 Decks can be public or require sign-in, toggled per presentation.
 
 - **Config (source of truth, in the repo):**
-  - `config/users.json` — accounts (`email`, `username`, `role`, bcrypt
-    `passwordHash`). Passwords are never stored in plaintext.
+  - `config/users.json` — admin/viewer accounts (`email`, `username`, `role`,
+    bcrypt `passwordHash`). Passwords are never stored in plaintext.
   - `config/decks-access.json` — `{ "<slug>": { "protected": true|false } }`.
-- **Login:** `/login`. Sessions are signed cookies (HMAC-SHA256). Set a strong
-  `AUTH_SECRET` (see `.env.example`) locally and in Vercel.
+  - `config/site.json` — bcrypt hash of the shared presentation password.
+- **Two ways in, by design:**
+  - **Presentation gate (`/login`)** — a single shared password (Vimeo-style)
+    that unlocks every protected deck. Hand it to viewers. No username.
+  - **Admin sign-in (`/admin/login`)** — username + password for an admin
+    account; required for the `/admin` portal. Admins can also view decks.
+- Sessions are signed cookies (HMAC-SHA256). Set a strong `AUTH_SECRET`
+  (see `.env.example`) locally and in Vercel.
 - **Middleware** (`middleware.ts`) gates protected decks and the `/admin` portal.
-- **Admin portal:** `/admin` (admin role required). Toggle deck protection and
-  add / edit / delete access records and reset passwords.
+- **Admin portal:** `/admin` (admin role required) — toggle deck protection,
+  change the shared presentation password, and add / edit / delete access
+  records and reset passwords.
 
 **Editing model:** the repo is the source of truth. The admin portal is fully
 editable when you run locally (`npm run dev`); commit and push, and Vercel
@@ -103,6 +110,7 @@ admin is **view-only in production** (it shows a banner explaining this).
 
 Seed admin (change it immediately): username `admin` /
 email `moyelaw@gmail.com` / password `meridian2026`.
+Seed presentation password: `dillon2026` (change it in `/admin`).
 
 ## Deployment
 

@@ -2,7 +2,12 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { ArrowLeft } from "lucide-react";
 import { decks } from "@/lib/decks";
-import { isReadOnly, readDecksAccess, readSafeUsers } from "@/lib/access";
+import {
+  hasPresentationPassword,
+  isReadOnly,
+  readDecksAccess,
+  readSafeUsers,
+} from "@/lib/access";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
 import { AdminClient } from "./admin-client";
 
@@ -13,7 +18,11 @@ export default async function AdminPage() {
   const store = await cookies();
   const session = await verifySession(store.get(SESSION_COOKIE)?.value);
 
-  const [users, access] = await Promise.all([readSafeUsers(), readDecksAccess()]);
+  const [users, access, gateSet] = await Promise.all([
+    readSafeUsers(),
+    readDecksAccess(),
+    hasPresentationPassword(),
+  ]);
   const deckList = decks.map((d) => ({
     slug: d.slug,
     title: d.title,
@@ -58,6 +67,7 @@ export default async function AdminPage() {
           users={users}
           readOnly={isReadOnly()}
           currentEmail={session?.email ?? ""}
+          gateSet={gateSet}
         />
       </div>
     </main>

@@ -27,6 +27,7 @@ import {
 import {
   addUserAction,
   deleteUserAction,
+  setPresentationPasswordAction,
   toggleDeckAction,
   updateUserAction,
   type ActionResult,
@@ -44,11 +45,13 @@ export function AdminClient({
   users,
   readOnly,
   currentEmail,
+  gateSet,
 }: {
   decks: DeckRow[];
   users: SafeUser[];
   readOnly: boolean;
   currentEmail: string;
+  gateSet: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -133,6 +136,15 @@ export function AdminClient({
         </div>
       </section>
 
+      {/* Presentation password */}
+      <PresentationPasswordSection
+        gateSet={gateSet}
+        disabled={readOnly || pending}
+        onSubmit={(password) =>
+          run(() => setPresentationPasswordAction(password))
+        }
+      />
+
       {/* Users */}
       <section>
         <div className="flex items-end justify-between">
@@ -210,6 +222,46 @@ export function AdminClient({
         </div>
       </section>
     </div>
+  );
+}
+
+function PresentationPasswordSection({
+  gateSet,
+  disabled,
+  onSubmit,
+}: {
+  gateSet: boolean;
+  disabled: boolean;
+  onSubmit: (password: string) => void;
+}) {
+  const [password, setPassword] = useState("");
+  return (
+    <section>
+      <SectionHead
+        title="Presentation password"
+        note="A single shared password (Vimeo-style) that unlocks every protected deck. Hand this out to viewers."
+      />
+      <div className="card mt-4 flex flex-col gap-4 p-6 sm:flex-row sm:items-end">
+        <div className="flex flex-1 flex-col gap-1.5">
+          <Label>{gateSet ? "Set a new password" : "Set the password"}</Label>
+          <Input
+            type="text"
+            placeholder={gateSet ? "•••••••• (a password is set)" : "Enter a password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <Button
+          disabled={disabled || !password}
+          onClick={() => {
+            onSubmit(password);
+            setPassword("");
+          }}
+        >
+          {gateSet ? "Update password" : "Set password"}
+        </Button>
+      </div>
+    </section>
   );
 }
 

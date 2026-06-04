@@ -5,16 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginForm({
-  next,
-  initialError,
-}: {
-  next: string;
-  initialError?: string;
-}) {
-  const [identifier, setIdentifier] = useState("");
+export function GateForm({ next }: { next: string }) {
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | undefined>(initialError);
+  const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
@@ -25,14 +18,13 @@ export function LoginForm({
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ password }),
       });
       const data = await res.json();
       if (data.ok) {
-        // Full navigation so middleware sees the new cookie.
         window.location.assign(next.startsWith("/") ? next : "/");
       } else {
-        setError(data.error || "Sign in failed.");
+        setError(data.error || "Incorrect password.");
         setLoading(false);
       }
     } catch {
@@ -44,21 +36,12 @@ export function LoginForm({
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="identifier">Username or email</Label>
-        <Input
-          id="identifier"
-          autoComplete="username"
-          autoFocus
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
-        />
-      </div>
-      <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">Password</Label>
         <Input
           id="password"
           type="password"
           autoComplete="current-password"
+          autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -67,7 +50,7 @@ export function LoginForm({
         <p className="font-sans text-sm text-negative">{error}</p>
       ) : null}
       <Button type="submit" disabled={loading} className="mt-1">
-        {loading ? "Signing in…" : "Sign in"}
+        {loading ? "Unlocking…" : "View presentation"}
       </Button>
     </form>
   );

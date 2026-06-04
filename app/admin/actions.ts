@@ -8,6 +8,7 @@ import {
   deleteUser,
   ReadOnlyError,
   setDeckProtected,
+  setPresentationPassword,
   updateUser,
 } from "@/lib/access";
 
@@ -37,6 +38,20 @@ export async function toggleDeckAction(
   try {
     await requireAdmin();
     await setDeckProtected(slug, isProtected);
+    revalidatePath("/admin");
+    return { ok: true };
+  } catch (e) {
+    return toResult(e);
+  }
+}
+
+export async function setPresentationPasswordAction(
+  password: string,
+): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    if (!password) return { ok: false, error: "Password is required." };
+    await setPresentationPassword(password);
     revalidatePath("/admin");
     return { ok: true };
   } catch (e) {

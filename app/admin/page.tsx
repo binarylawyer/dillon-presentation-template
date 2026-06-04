@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { decks } from "@/lib/decks";
 import {
   hasPresentationPassword,
@@ -42,6 +42,12 @@ export default async function AdminPage() {
             </h1>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/admin/runbook"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-brass-deep no-underline transition hover:text-navy"
+            >
+              <BookOpen size={14} /> Runbook
+            </Link>
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-slate-mid no-underline transition hover:text-navy"

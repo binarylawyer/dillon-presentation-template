@@ -82,7 +82,30 @@ Or run the **`meridian-deck`** Claude Code skill
 (`.claude/skills/meridian-deck/`) and describe the deck you want — it scaffolds
 the above on-brand.
 
+## Access control
+
+Decks can be public or require sign-in, toggled per presentation.
+
+- **Config (source of truth, in the repo):**
+  - `config/users.json` — accounts (`email`, `username`, `role`, bcrypt
+    `passwordHash`). Passwords are never stored in plaintext.
+  - `config/decks-access.json` — `{ "<slug>": { "protected": true|false } }`.
+- **Login:** `/login`. Sessions are signed cookies (HMAC-SHA256). Set a strong
+  `AUTH_SECRET` (see `.env.example`) locally and in Vercel.
+- **Middleware** (`middleware.ts`) gates protected decks and the `/admin` portal.
+- **Admin portal:** `/admin` (admin role required). Toggle deck protection and
+  add / edit / delete access records and reset passwords.
+
+**Editing model:** the repo is the source of truth. The admin portal is fully
+editable when you run locally (`npm run dev`); commit and push, and Vercel
+redeploys with the new config. On Vercel the filesystem is read-only, so the
+admin is **view-only in production** (it shows a banner explaining this).
+
+Seed admin (change it immediately): username `admin` /
+email `moyelaw@gmail.com` / password `meridian2026`.
+
 ## Deployment
 
 Deployed on Vercel as a Next.js app (`vercel.json` pins the `nextjs` framework
-preset). Pushing to the connected branch triggers a deployment.
+preset). Pushing to the connected branch triggers a deployment. Set
+`AUTH_SECRET` in the Vercel project's environment variables.
